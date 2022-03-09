@@ -47,10 +47,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
 				conn.sendall(bytes(send_str, 'utf-8'))
 
-				# print(f"Size: {len(rand_arr)}")
-				# for i in rand_arr:
-				# 	print(i)
-
 		except KeyboardInterrupt:
 			print('Shutting down the server...')
 			break
