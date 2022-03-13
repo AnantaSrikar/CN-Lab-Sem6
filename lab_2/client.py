@@ -67,19 +67,21 @@ def sendMatrix(matrix, N):
 		# Send the random array
 		s.sendto(bytes(dumps({N: matrix}), 'utf-8'), serverAddrPort)
 
-N = 5
+if __name__ == "__main__":
+	
+	N = 5
 
-matrix = getRandomMatrix(N - 1)
-getParity(matrix, N)
+	# Generating a random matrix of size N - 1
+	matrix = getRandomMatrix(N - 1)
 
-# Randomly try to introduce an error
-if(randint(0, 1)):
-	flipRandomMatrixBit(matrix, N)
+	# Assigning parity for the same
+	getParity(matrix, N)
 
-print(dumps({N: matrix}))
+	# Randomly try to introduce an error
+	if(randint(0, 1)):
+		flipRandomMatrixBit(matrix, N)
 
-sendMatrix(matrix, N)
-
-# Now, we send this to the server using UDP protocol
-
-# Ideally one should be using __name__ == "__main__", but ehh lite
+	print(dumps({N: matrix}))
+	
+	# Sending data to the server
+	sendMatrix(matrix, N)

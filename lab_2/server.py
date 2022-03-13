@@ -39,4 +39,5 @@ def getDataFromClient():
 			except Exception as e:
 				print(f"Something bad happened: {e}")
 
-getDataFromClient()
+if __name__ == "__main__":
+	getDataFromClient()
