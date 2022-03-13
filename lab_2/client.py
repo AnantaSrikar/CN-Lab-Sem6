@@ -11,7 +11,6 @@ def flipBit(bit):
 	bit %= 2
 	return bit
 
-
 # Function to flip a random bit in the matrix
 def flipRandomMatrixBit(matrix, N):
 	randX = randint(0, N - 1)
@@ -31,6 +30,7 @@ def getRandomMatrix(N):
 	return matrix
 
 # Function to initialize parity
+# TODO: Fix bug in generating column parity
 def getParity(matrix, N):
 	
 	matrix.append([])
@@ -77,11 +77,19 @@ if __name__ == "__main__":
 	# Assigning parity for the same
 	getParity(matrix, N)
 
+	for i in range(N):
+		print(matrix[i])
+
 	# Randomly try to introduce an error
 	if(randint(0, 1)):
 		flipRandomMatrixBit(matrix, N)
 
-	print(dumps({N: matrix}))
+	print("\n\n")
+
+	for i in range(N):
+		print(matrix[i])
+
+	# print(dumps({N: matrix}))
 	
 	# Sending data to the server
 	sendMatrix(matrix, N)

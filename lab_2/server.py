@@ -4,6 +4,27 @@
 import socket
 from json import loads
 
+from client import flipBit
+
+# Function to find bit error using parity bits
+def getFaults(matrix, N):
+	faultX = -1
+	faultY = -1
+
+	for i in range(N):
+		
+		parityX = 0
+		
+		for j in range(N - 1):
+			if(matrix[i][j]):
+				print(f"DEBUG: parity = {parityX}, flipping at ({i}, {j})")
+				parityX = flipBit(parityX)
+
+		# Check if we found the error row
+		if (parityX != matrix[i][N - 1]):
+			print(f"Error at ({i}, y)")
+			break
+
 # Function to listen for clients
 def getDataFromClient():
 	HOST = "127.0.0.1"				# The server's hostname or IP address
@@ -29,7 +50,8 @@ def getDataFromClient():
 
 				data_json = loads(str_data.decode())
 
-				print(data_json)
+				for i in data_json:
+					getFaults(data_json[i], int(i))
 
 			except KeyboardInterrupt:
 				print('Shutting down the server...')
