@@ -37,7 +37,7 @@ def getFaults(matrix, N):
 			faultY = j
 			break
 
-	if(faultX * faultY >= 0):
+	if(faultX * faultY >= 0 and faultX >= 0):
 		return (faultX, faultY)
 
 # Function to listen for clients
@@ -54,27 +54,42 @@ def getDataFromClient():
 			print("Port is busy! You're probably running the server already?")
 			exit()
 
-		while True:
-			try:
-				# Client should initiate a connection in UDP, due to the nature of the connectionless protocol
-				str_data = s.recvfrom(2048)
-				
-				client_addr = str_data[1]
-				str_data = str_data[0]
-				print(f"\nConnected to {client_addr}")
+		try:
+			# Client should initiate a connection in UDP, due to the nature of the connectionless protocol
+			str_data = s.recvfrom(2048)
+			
+			client_addr = str_data[1]
+			str_data = str_data[0]
+			print(f"\nConnected to {client_addr}")
 
-				data_json = loads(str_data.decode())
+			data_json = loads(str_data.decode())
 
-				for i in data_json:
-					getFaults(data_json[i], int(i))
+			return data_json
 
-			except KeyboardInterrupt:
-				print('Shutting down the server...')
-				break
-
-			# We should ideally never hit this, but nobody can predict the future ¯\_(ツ)_/¯
-			except Exception as e:
+		# We should ideally never hit this, but nobody can predict the future ¯\_(ツ)_/¯
+		except Exception as e:
 				print(f"Something bad happened: {e}")
 
 if __name__ == "__main__":
-	getDataFromClient()
+
+	while(True):
+		try:
+			json_data = getDataFromClient()
+
+			for i in json_data:
+				matrix = json_data[i]
+				N = int(i)
+			
+			faults = getFaults(matrix, N)
+
+			if(faults):
+				print(f"Bit flip detected at {faults}, correcting...")
+				matrix[faults[0]][faults[1]] = flipBit(matrix[faults[0]][faults[1]])
+
+			print("\nMatrix:")
+			for i in range(N):
+				print(matrix[i])
+
+		except KeyboardInterrupt:
+			print('Shutting down the server...')
+			break

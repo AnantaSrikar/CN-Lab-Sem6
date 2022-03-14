@@ -87,7 +87,7 @@ if __name__ == "__main__":
 	if(randint(0, 1)):
 		flipRandomMatrixBit(matrix, N)
 
-	print("\n\n")
+	print("\n")
 
 	for i in range(N):
 		print(matrix[i])
