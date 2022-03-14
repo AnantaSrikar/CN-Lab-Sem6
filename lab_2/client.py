@@ -45,9 +45,12 @@ def getParity(matrix, N):
 
 		for j in range(N - 1):
 			if(matrix[i][j]):
+
 				parityJ = flipBit(parityJ)
 
-				matrix[N - 1][j] = flipBit(matrix[N - 1][j])
+				# Skip flipping column bits on last row
+				if(i < N - 1):
+					matrix[N - 1][j] = flipBit(matrix[N - 1][j])
 		
 		# For last row check
 		if(i != N - 1):

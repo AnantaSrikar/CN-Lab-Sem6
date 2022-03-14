@@ -17,13 +17,28 @@ def getFaults(matrix, N):
 		
 		for j in range(N - 1):
 			if(matrix[i][j]):
-				print(f"DEBUG: parity = {parityX}, flipping at ({i}, {j})")
 				parityX = flipBit(parityX)
 
 		# Check if we found the error row
 		if (parityX != matrix[i][N - 1]):
-			print(f"Error at ({i}, y)")
+			faultX = i
 			break
+
+	for j in range(N):
+		
+		parityY = 0
+		
+		for i in range(N - 1):
+			if(matrix[i][j]):
+				parityY = flipBit(parityY)
+
+		# Check if we found the error row
+		if (parityY != matrix[N - 1][j]):
+			faultY = j
+			break
+
+	if(faultX * faultY >= 0):
+		return (faultX, faultY)
 
 # Function to listen for clients
 def getDataFromClient():
