@@ -74,11 +74,9 @@ if __name__ == "__main__":
 
 	while(True):
 		try:
-			json_data = getDataFromClient()
+			matrix = getDataFromClient()
 
-			for i in json_data:
-				matrix = json_data[i]
-				N = int(i)
+			N = len(matrix[0])
 			
 			faults = getFaults(matrix, N)
 

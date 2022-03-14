@@ -30,7 +30,6 @@ def getRandomMatrix(N):
 	return matrix
 
 # Function to initialize parity
-# TODO: Fix bug in generating column parity
 def getParity(matrix, N):
 	
 	matrix.append([])
@@ -60,7 +59,7 @@ def getParity(matrix, N):
 			matrix[i][N - 1] = parityJ
 
 # Function to send data to local server using UDP protocol
-def sendMatrix(matrix, N):
+def sendMatrix(matrix):
 	HOST = "127.0.0.1"				# The server's hostname or IP address
 	PORT = 42069 					# The port used by the server
 	serverAddrPort = (HOST, PORT)	# Convinience tuple
@@ -68,11 +67,11 @@ def sendMatrix(matrix, N):
 	with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
 
 		# Send the random array
-		s.sendto(bytes(dumps({N: matrix}), 'utf-8'), serverAddrPort)
+		s.sendto(bytes(dumps(matrix), 'utf-8'), serverAddrPort)
 
 if __name__ == "__main__":
 	
-	N = 5
+	N = int(input('Enter N: '))
 
 	# Generating a random matrix of size N - 1
 	matrix = getRandomMatrix(N - 1)
@@ -91,8 +90,6 @@ if __name__ == "__main__":
 
 	for i in range(N):
 		print(matrix[i])
-
-	# print(dumps({N: matrix}))
 	
 	# Sending data to the server
-	sendMatrix(matrix, N)
+	sendMatrix(matrix)
