@@ -1,4 +1,4 @@
-# UDP client that generates blocks of data along with row and column parity
+# UDP client that sends a string with 2-D parity
 # Author: Srikar
 
 import socket
@@ -12,33 +12,45 @@ def flipBit(bit):
 	return bit
 
 # Function to flip a random bit in the matrix
-def flipRandomMatrixBit(matrix, N):
-	randX = randint(0, N - 1)
-	randY = randint(0, N - 1)
+def flipRandomMatrixBit(matrix):
+	randX = randint(0, len(matrix) - 1)
+	randY = randint(0, len(matrix[0]) - 1)
 	matrix[randX][randY] = flipBit(matrix[randX][randY])
 	print(f"Flipped bit at ({randX}, {randY})")
 
-# Function to get a random matrix having 0s and 1s of size N
-def getRandomMatrix(N):
+# Function to convert string to bits
+def getMatrixFromString(input_str):
+	
 	matrix = []
 
-	for i in range(N):
+	# Iterate through all letters
+	for i in range(len(input_str)):
 		matrix.append([])
-		for j in range(N):
-			matrix[i].append(randint(0, 1))
-
+		# First, ord gets decimal, then convert that to binary and string for getting individual bits
+		# Finally convert to int to make it compatible with previous code
+		for de_char in str(bin(ord(input_str[i])))[2:]:
+			matrix[i].append(int(de_char))
+	
 	return matrix
 
 # Function to initialize parity
-def getParity(matrix, N):
+def getParity(matrix):
+
+	# Number of rows
+	M = len(matrix) + 1
+
+	# Number of columns. This should be 8 because 1 char = 1 byte = 8 bits
+	N = len(matrix[0]) + 1
+
+	print(M, N)
 	
 	matrix.append([])
 	
 	# Initialzie column parities with 0
 	for i in range(N):
-		matrix[N - 1].append(0)
+		matrix[M - 1].append(0)
 
-	for i in range(N):
+	for i in range(M):
 		
 		parityJ = 0
 
@@ -48,11 +60,11 @@ def getParity(matrix, N):
 				parityJ = flipBit(parityJ)
 
 				# Skip flipping column bits on last row
-				if(i < N - 1):
-					matrix[N - 1][j] = flipBit(matrix[N - 1][j])
+				if(i < M - 1):
+					matrix[M - 1][j] = flipBit(matrix[M - 1][j])
 		
 		# For last row check
-		if(i != N - 1):
+		if(i != M - 1):
 			matrix[i].append(parityJ)
 		
 		else:
@@ -71,24 +83,24 @@ def sendMatrix(matrix):
 
 if __name__ == "__main__":
 	
-	N = int(input('Enter N: '))
+	input_str = input("Enter string to be sent: ")
 
 	# Generating a random matrix of size N - 1
-	matrix = getRandomMatrix(N - 1)
+	matrix = getMatrixFromString(input_str)
 
 	# Assigning parity for the same
-	getParity(matrix, N)
+	getParity(matrix)
 
-	for i in range(N):
+	for i in range(len(matrix)):
 		print(matrix[i])
 
 	# Randomly try to introduce an error
 	if(randint(0, 1)):
-		flipRandomMatrixBit(matrix, N)
+		flipRandomMatrixBit(matrix)
 
 	print("\n")
 
-	for i in range(N):
+	for i in range(len(matrix)):
 		print(matrix[i])
 	
 	# Sending data to the server

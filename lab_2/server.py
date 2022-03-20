@@ -11,6 +11,7 @@ def getFaults(matrix, N):
 	faultX = -1
 	faultY = -1
 
+	# For error row
 	for i in range(N):
 		
 		parityX = 0
@@ -24,6 +25,7 @@ def getFaults(matrix, N):
 			faultX = i
 			break
 
+	# For error column
 	for j in range(N):
 		
 		parityY = 0
@@ -32,7 +34,7 @@ def getFaults(matrix, N):
 			if(matrix[i][j]):
 				parityY = flipBit(parityY)
 
-		# Check if we found the error row
+		# Check if we found the error column
 		if (parityY != matrix[N - 1][j]):
 			faultY = j
 			break

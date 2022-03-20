@@ -1,4 +1,4 @@
-# UDP server to recieve data and correct errors in it
+# UDP server to recieve a string with 2-D parity
 # Author: Srikar
 
 import socket
@@ -7,11 +7,15 @@ from json import loads
 from client import flipBit
 
 # Function to find bit error using parity bits
-def getFaults(matrix, N):
+def getFaults(matrix):
 	faultX = -1
 	faultY = -1
 
-	for i in range(N):
+	M = len(matrix)		# Rowz
+	N = len(matrix[0])	# Columns
+
+	# For error row
+	for i in range(M):
 		
 		parityX = 0
 		
@@ -24,16 +28,17 @@ def getFaults(matrix, N):
 			faultX = i
 			break
 
+	# For error column
 	for j in range(N):
 		
 		parityY = 0
 		
-		for i in range(N - 1):
+		for i in range(M - 1):
 			if(matrix[i][j]):
 				parityY = flipBit(parityY)
 
 		# Check if we found the error row
-		if (parityY != matrix[N - 1][j]):
+		if (parityY != matrix[M - 1][j]):
 			faultY = j
 			break
 
@@ -75,17 +80,15 @@ if __name__ == "__main__":
 	while(True):
 		try:
 			matrix = getDataFromClient()
-
-			N = len(matrix[0])
 			
-			faults = getFaults(matrix, N)
+			faults = getFaults(matrix)
 
 			if(faults):
 				print(f"Bit flip detected at {faults}, correcting...")
 				matrix[faults[0]][faults[1]] = flipBit(matrix[faults[0]][faults[1]])
 
 			print("\nMatrix:")
-			for i in range(N):
+			for i in range(len(matrix)):
 				print(matrix[i])
 
 		except KeyboardInterrupt:
