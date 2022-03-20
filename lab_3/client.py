@@ -5,6 +5,9 @@ import socket
 from random import randint
 from json import dumps
 
+# No of columns. 8 because char is 8 bits long
+N = 8
+
 # Simple function to flip a bit
 def flipBit(bit):
 	bit += 1
@@ -14,7 +17,7 @@ def flipBit(bit):
 # Function to flip a random bit in the matrix
 def flipRandomMatrixBit(matrix):
 	randX = randint(0, len(matrix) - 1)
-	randY = randint(0, len(matrix[0]) - 1)
+	randY = randint(0, N - 1)
 	matrix[randX][randY] = flipBit(matrix[randX][randY])
 	print(f"Flipped bit at ({randX}, {randY})")
 
@@ -26,10 +29,17 @@ def getMatrixFromString(input_str):
 	# Iterate through all letters
 	for i in range(len(input_str)):
 		matrix.append([])
+
+		for j in range(7):
+			matrix[i].append(0)
+
+		# Filling in reverse to ensure proper placement of bits
+		j = 6
 		# First, ord gets decimal, then convert that to binary and string for getting individual bits
 		# Finally convert to int to make it compatible with previous code
-		for de_char in str(bin(ord(input_str[i])))[2:]:
-			matrix[i].append(int(de_char))
+		for de_char in str(bin(ord(input_str[i])))[2:][::-1]:
+			matrix[i][j] = (int(de_char))
+			j -= 1
 	
 	return matrix
 
@@ -38,9 +48,6 @@ def getParity(matrix):
 
 	# Number of rows
 	M = len(matrix) + 1
-
-	# Number of columns. This should be 8 because 1 char = 1 byte = 8 bits
-	N = len(matrix[0]) + 1
 
 	print(M, N)
 	
@@ -55,7 +62,7 @@ def getParity(matrix):
 		parityJ = 0
 
 		for j in range(N - 1):
-			# TODO: Fix out of range when smaller binary numbers are entered
+			
 			if(matrix[i][j]):
 
 				parityJ = flipBit(parityJ)

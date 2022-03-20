@@ -4,15 +4,14 @@
 import socket
 from json import loads
 
-from client import flipBit
+from client import flipBit, N
 
 # Function to find bit error using parity bits
 def getFaults(matrix):
 	faultX = -1
 	faultY = -1
 
-	M = len(matrix)		# Rowz
-	N = len(matrix[0])	# Columns
+	M = len(matrix)	# Rowz
 
 	# For error row
 	for i in range(M):
@@ -78,9 +77,7 @@ def getDataFromClient():
 # Function to decode string from recieved matrix
 def getStringFromMatrix(matrix):
 	
-
 	M = len(matrix)
-	N = len(matrix[0])
 	
 	recv_str = ""
 
