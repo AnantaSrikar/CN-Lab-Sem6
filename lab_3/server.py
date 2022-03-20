@@ -75,6 +75,26 @@ def getDataFromClient():
 		except Exception as e:
 				print(f"Something bad happened: {e}")
 
+# Function to decode string from recieved matrix
+def getStringFromMatrix(matrix):
+	
+
+	M = len(matrix)
+	N = len(matrix[0])
+	
+	recv_str = ""
+
+	for i in range(M - 1):
+		dec_str = 0
+		
+		for j in range(N - 1):
+			if(matrix[i][j]):
+				dec_str += pow(2, N - 2 - j)
+
+		recv_str += chr(dec_str)
+
+	return recv_str
+
 if __name__ == "__main__":
 
 	while(True):
@@ -90,6 +110,11 @@ if __name__ == "__main__":
 			print("\nMatrix:")
 			for i in range(len(matrix)):
 				print(matrix[i])
+
+			recv_str = getStringFromMatrix(matrix)
+
+			print("Received string:")
+			print(recv_str)
 
 		except KeyboardInterrupt:
 			print('Shutting down the server...')

@@ -55,6 +55,7 @@ def getParity(matrix):
 		parityJ = 0
 
 		for j in range(N - 1):
+			# TODO: Fix out of range when smaller binary numbers are entered
 			if(matrix[i][j]):
 
 				parityJ = flipBit(parityJ)
@@ -87,6 +88,9 @@ if __name__ == "__main__":
 
 	# Generating a random matrix of size N - 1
 	matrix = getMatrixFromString(input_str)
+
+	for i in range(len(matrix)):
+		print(matrix[i])
 
 	# Assigning parity for the same
 	getParity(matrix)
