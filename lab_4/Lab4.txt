@@ -1,0 +1,7 @@
+Lab Task 4: Implement an Application Level file sharing protocol. 
+Problem Setting: Two network clients listening for requests waiting to share files (FTP)
+
+Goals of the assignment: To enable two clients to:
+-Know list of files on each other's machines in designated shared folders
+-Upload a file to each other.
+-Download a file to each other.
