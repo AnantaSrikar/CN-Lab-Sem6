@@ -1,1 +1,4 @@
 **/__pycache__
+env
+**/twistd.pid
+**/server_root
