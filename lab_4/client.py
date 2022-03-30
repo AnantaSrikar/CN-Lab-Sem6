@@ -4,11 +4,16 @@
 """
 
 from ftplib import FTP
-from os import system
+from os import system, remove
+from os.path import basename
 
 # Fixed server details
 HOST = "localhost"
 PORT = 42069
+
+# Funtion to print basic exception that is unhandlable
+def printRandException(e):
+	print(f"Something bad happened: {e}")
 
 # Function to list all files and directories on the server
 def ftpLS(ftp):
@@ -21,30 +26,49 @@ def ftpLS(ftp):
 	for line in data:
 		print("-", line)
 
+# Function to upload files to server
 def uploadToServer(ftp, local_file_path):
-	print(f"Upload {local_file_path} to server")
-
 	try:
 		with open(local_file_path, "rb") as inFPtr:
-			# TODO: Make file name dynamic
-			ftp.storbinary("STOR teeest.txt", inFPtr)
-		print(f"Uploaded {local_file_path} successfully!")
+			ftp.storbinary(f"STOR {basename(local_file_path)}", inFPtr)
+		print(f"Uploaded {basename(local_file_path)} successfully!")
 	except Exception as e:
-		print(f"Something bad happened: {e}")
+		printRandException(e)
 
+
+# Function to download file from server
 def downloadFromServer(ftp, remote_file_path):
-	print(f"Download {remote_file_path} from server")
+	try:
+		with open(basename(remote_file_path), "wb") as outFPtr:
+			ftp.retrbinary(f"RETR {remote_file_path}", outFPtr.write)
+
+	except Exception as e:
+		printRandException(e)
+		remove(basename(remote_file_path))
 
 if __name__ == "__main__":
 
 	ftp = FTP()
 
-	ftp.connect(HOST, PORT)	# To connect to the server
-	ftp.login()	# Anonymous login
+	try:
+		ftp.connect(HOST, PORT)	# To connect to the server
+		ftp.login()	# Anonymous login
+
+	except ConnectionRefusedError:
+		print("Unable to connect to server, is it running?")
+		exit()
+	
+	except Exception as e:
+		printRandException(e)
+		exit()
 
 	while(True):
 		choice = input("\n1. See all files on server\n2. Upload file to server\n3. Download a file from server\nAnd anything else to exit!\n\nEnter choice: ")
-		choice = int(choice)
+
+		try:
+			choice = int(choice)
+		except ValueError:
+			pass
 
 		system('clear')
 

@@ -8,6 +8,10 @@ Problem Setting: Two network clients listening for requests waiting to share fil
 3. Download a file to each other
 
 ## Execution
-First, head over to the right directory which will contain both the `server.py` and `client.py` files.
-
-TODO: Complete Execution once completed
+- First, head over to the right directory which will contain both the `server.py` and `client.py` files.
+- Make a virutal environment to install the ftp server package by running `python3 -m venv env`.
+- Activate virtual environment with the command `source env/bin/activate`.
+- Its suggested to run `pip3 install --upgrade pip setuptools` to get the latest base packages.
+- Install necessary packages by running `pip3 install -r requirements.txt`
+- Run `python3 server.py` to start the server.
+- Run `python3 client.py` to start the client.
